@@ -1,7 +1,6 @@
 const util                                  = require('util');
 const smtpVerifier                          = require('../email-verify');
 const disposableDomains                     = require('./disposable-domains');
-const requestPromise                        = require('request-promise')
 const logger                                = require('../logger.js').logger
 
 const SMTP_VERIFIER_INFO_CODES              = { finishedVerification: 1, invalidEmailStructure: 2, noMxRecords: 3, SMTPConnectionTimeout: 4, domainNotFound: 5, SMTPConnectionError: 6 };
@@ -31,7 +30,7 @@ const NON_EXISTENT_LOCAL_PART               = 'a32dp3.2.ds.2sj';
 
 // GMAIL crawl validation actions
 async function gmail(page, email) {
-  await page.goto(GMAIL_SING_IN_URL);
+  await page.goto(GMAIL_SING_IN_URL, {waitUntil: 'domcontentloaded'});
   await page.keyboard.type(email);
   await page.click('#next');
   await sleep(1000);
@@ -120,7 +119,6 @@ async function smtpValidate(email) {
       return { email, message, valid };
     })
     .catch(e => {
-      // console.log(e)
       switch (e.code) {
         case 'ENOTFOUND':
           return { email, message: 'Domain Not Found', valid: 'Domain Not Found' }
@@ -144,7 +142,7 @@ function isCrawableDomain(domain) {
 
 async function executeCrawlerFor(page, email, domain) {
   let valid;
-
+  console.log('executeCrawlerFor')
   switch (domain) {
     case HOTMAIL_DOMAIN:
     case OUTLOOK_DOMAIN:
@@ -211,11 +209,8 @@ function generateEmailVariationsRows(personName, domain) {
 }
 
 async function verify(email, page) {
-  logger.info('#verify helpers:' + email)
-  const url = await requestPromise.get('http://httpbin.org/ip');
-  const origin = JSON.parse(url)
-  logger.info("# New Veryfing:" + email)
-  logger.info("# Outgoing IP address is: " + origin.origin)
+  const results = [];
+  logger.info("# Veryfing " + email, email)
   const [_localPart, domain] = email.split(AT_SIGN);
   valitidyCheckReult = isInvalid(email, domain);
 
@@ -228,9 +223,9 @@ async function verify(email, page) {
 
   // CRAWLER CHECK
   if (valitidyCheckReult.crawable) {
-   logger.info('# Verifying craw: '+ domain) 
-   let result = await executeCrawlerFor(page, email, domain);
-   return result;
+    logger.info('# Verifying craw: '+ domain, email)
+    let result = await executeCrawlerFor(page, email, domain);
+    return result;
   }
 
   // CATCH-ALL CHECK

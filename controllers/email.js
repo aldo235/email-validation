@@ -1,12 +1,11 @@
 'use strict';
 
 const scheduler = require('../scheduler');
-const Papa      = require('papaparse');
-const logger	= require('../logger.js').logger
+const Papa      = require('papaparse')
 
 function verifySingle(req, res) {
   const { email } = req.body;
-  logger.info('testing' + email)
+  console.log('verifySingle')
   return scheduler
     .verifiers([email])
     .then(results => res.status(200).json(results))

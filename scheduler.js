@@ -5,7 +5,6 @@ const path = require('path');
 const validatorWorkerPath = path.resolve('workers/validator.js');
 const verifierWorkerPath = path.resolve('workers/verifier.js');
 const converter = require('json-2-csv');
-const logger = require('./logger.js').logger
 // create reusable transporter object using the default SMTP transport
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -16,7 +15,7 @@ const transporter = nodemailer.createTransport({
 });
 
 async function verifiers(emailData, options = {}) {
-  logger.info('scheduler verify')
+  console.log('scheduler')
   const recipient = options.email;
   const emailSequence = JSON.parse(JSON.stringify(emailData)); // make a copy
 
