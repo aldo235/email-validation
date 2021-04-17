@@ -1,0 +1,24 @@
+const { _Worker, parentPort, workerData } = require('worker_threads');
+const puppeteer                           = require('puppeteer');
+const helper                              = require('../helpers/email');
+
+(async () => {
+  const browser = await puppeteer.launch({ headless: true, args:['--no-sandbox']});
+  const page = await browser.newPage();
+//  await page.authenticate({ 
+  //  username: 'cnhjfhlo-rotate' , 
+   // password:'jx9lodr1mr03' 
+  //});
+
+  const results = [];
+
+  let email;
+  for(let i = 0; i < workerData.length; i++) {
+    email = workerData[i];
+    results.push(await helper.verify(email, page, results));
+  }
+
+  await browser.close();
+
+  parentPort.postMessage(results);
+})();

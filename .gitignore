@@ -1,0 +1,7 @@
+node_modules
+screenshots
+package-lock.json
+.env
+logger.log
+server.log
+start_service.sh

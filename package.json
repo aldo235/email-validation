@@ -1,0 +1,37 @@
+{
+  "name": "email-verificator-and-validator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "run(){ nodemon --exec 'node --experimental-worker' server.js; }; run",
+    "server:args": "run(){ HOST=${1:-127.0.0.1} PORT=${2:-3000} nodemon --exec 'node -r dotenv/config --experimental-worker' server.js; }; run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "dns": "^0.2.2",
+    "dotenv": "^6.1.0",
+    "email-verify": "^0.2.1",
+    "express": "^4.16.4",
+    "express-fileupload": "^1.1.4",
+    "json-2-csv": "^3.5.3",
+    "mocha": "^4.0.1",
+    "net": "^1.0.2",
+    "nodemailer": "^6.1.1",
+    "nodemon": "^1.18.4",
+    "nyc": "^11.3.0",
+    "papaparse": "^4.6.3",
+    "proxy-chain": "^1.0.0",
+    "puppeteer": "^8.0.0",
+    "puppeteer-page-proxy": "^1.2.8",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.6",
+    "simple-node-logger": "^18.12.22",
+    "validator": "^9.1.1",
+    "xvfb": "^0.4.0"
+  }
+}
